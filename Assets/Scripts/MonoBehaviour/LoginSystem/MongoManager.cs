@@ -1,6 +1,4 @@
 ﻿using MongoDB.Driver;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using System.Security.Cryptography;
 using System.Text;
@@ -37,21 +35,64 @@ public class MongoManager : MonoBehaviour
     }
 
 
-    public async void ConnectUser(MongoUser user)
+    public async void ConnectUser((string username, string password) user, System.Action<bool> callback)
     {
+        MongoUser mongoUser = new MongoUser()
+        {
+            username = user.username,
+            password = GetHashString(user.password),
+        };
+        
         var database = _client.GetDatabase("Game");
         var users = database.GetCollection<MongoUser>("Users");
-        var cursor = await users.FindAsync<MongoUser>((x) => user.FindUserThatIsNotConnected(x));
+        var cursor = await users.FindAsync<MongoUser>(mongoUser.FindUserThatIsNotConnected());
         var result = await cursor.ToListAsync();
         if(result.Count > 0)
         {
             await users.UpdateOneAsync((x) => x._id == result[0]._id, Builders<MongoUser>.Update.Set(x=>x.IsConnected,true));
             _connectedUsersId = result[0]._id;
+            callback(true);
             Debug.Log("User connected!");
         }
         else
         {
+            callback(false);
             Debug.LogError("User not found");
+        }
+    }
+
+    public async void RegisterUser((string username, string password) newUser ,System.Action<bool> callback)
+    {
+        var database = _client.GetDatabase("Game");
+        var users = database.GetCollection<MongoUser>("Users");
+        var cursor = await users.FindAsync(x => x.username == newUser.username);
+        var result = await cursor.ToListAsync();
+        if(result.Count > 0)
+        {
+            callback(false);
+            Debug.Log("User already exist");
+        }
+        else
+        {
+            MongoUser user = new MongoUser()
+            {
+                username = newUser.username,
+                password = GetHashString(newUser.password),
+                IsConnected = false
+            };
+            await users.InsertOneAsync(user);
+
+            var checkCursor = await users.FindAsync<MongoUser>(user.FindUserThatIsNotConnected());
+            var checkResult = await checkCursor.ToListAsync();
+            if(checkResult.Count > 0)
+            {
+                callback(true);
+            }
+            else
+            {
+                callback(false);
+            }
+            
         }
     }
 
@@ -66,7 +107,7 @@ public class MongoManager : MonoBehaviour
         //TODO - disconnect mongo user
         var database = _client.GetDatabase("Game");
         var users = database.GetCollection<MongoUser>("Users");
-        var cursor = await users.FindAsync<MongoUser>((x) => x.FindConnectedUser(_connectedUsersId));
+        var cursor = await users.FindAsync<MongoUser>(FindConnectedUser(_connectedUsersId));
         var result = await cursor.ToListAsync();
         if (result.Count > 0)
         {
@@ -80,6 +121,11 @@ public class MongoManager : MonoBehaviour
         }
     }
 
+    public FilterDefinition<MongoUser> FindConnectedUser(ObjectId userId)
+    {
+        var builder = Builders<MongoUser>.Filter;
+        return builder.Eq(x => x._id, userId) & builder.Eq(x => x.IsConnected, true);
+    }
 
 
     #region Stackoverflow - Hash string in c#

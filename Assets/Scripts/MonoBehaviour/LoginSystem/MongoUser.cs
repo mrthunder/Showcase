@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MongoDB.Bson;
+﻿using MongoDB.Bson;
+using MongoDB.Driver;
 
 public class MongoUser
 {
@@ -25,8 +21,12 @@ public class MongoUser
     public bool IsConnected { get; set; }
 
 
-    public bool FindUserThatIsNotConnected(MongoUser user) => ((this.username == user.username) && (this.password == user.password) && (!user.IsConnected));
+    public FilterDefinition<MongoUser> FindUserThatIsNotConnected()
+    {
+        var builder = Builders<MongoUser>.Filter;
+        return builder.Eq(x=>x.username, this.username) & builder.Eq(x=>x.password, this.password) & builder.Eq(x=>x.IsConnected,false);
+    }
 
-    public bool FindConnectedUser(ObjectId userId) => (this._id == userId && this.IsConnected);
+    
 }
 

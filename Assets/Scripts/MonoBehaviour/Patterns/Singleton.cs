@@ -15,7 +15,7 @@ public abstract class Singleton<T> : MonoBehaviour where T : Component
     {
         if(_instance != null)
         {
-            DestroyImmediate(_instance);
+            Destroy(_instance);
         }
     }
 }
