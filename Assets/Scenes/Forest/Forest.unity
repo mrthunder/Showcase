@@ -1203,7 +1203,6 @@ GameObject:
   - component: {fileID: 948251282}
   - component: {fileID: 948251281}
   - component: {fileID: 948251280}
-  - component: {fileID: 948251284}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -1269,24 +1268,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &948251284
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 948251279}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d8d656a7755df8b4badbc6dcbb2c4412, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _currentHealthPoints: 0
-  _maxHealthPoints: 54
-  _currentAttack: 92
-  _maxAttack: 92
-  _currentDefense: 48
-  _maxDefense: 48
 --- !u!1 &991942426
 GameObject:
   m_ObjectHideFlags: 0

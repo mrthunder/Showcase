@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
 
-public class RPGAttributes : MonoBehaviour
+[System.Serializable]
+public class RPGAttributes
 {
     [BoxGroup("Health"),SerializeField, MaxValue("_maxHealthPoints")]
     private uint _currentHealthPoints = 0;

@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 023e3c36f0b0c4142a451e7ce7339302, type: 3}
+  m_Name: Key(Item)
+  m_EditorClassIdentifier: 
+  Name: Key
+  DoesUseAttributes: 0
+  Attributes:
+    _currentHealthPoints: 0
+    _maxHealthPoints: 0
+    _currentAttack: 10
+    _maxAttack: 10
+    _currentDefense: 10
+    _maxDefense: 10
+  DoesItHeal: 0
+  DoesItDamages: 0
+  IsEquipable: 0
