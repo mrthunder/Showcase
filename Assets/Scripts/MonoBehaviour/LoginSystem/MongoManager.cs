@@ -37,6 +37,7 @@ public class MongoManager : MonoBehaviour
 
     public async void ConnectUser((string username, string password) user, System.Action<bool> callback)
     {
+        Debug.Log("Async method");
         MongoUser mongoUser = new MongoUser()
         {
             username = user.username,
@@ -44,20 +45,25 @@ public class MongoManager : MonoBehaviour
         };
         
         var database = _client.GetDatabase("Game");
+        Debug.Log("Get Database");
         var users = database.GetCollection<MongoUser>("Users");
+        Debug.Log("Get Collection");
         var cursor = await users.FindAsync<MongoUser>(mongoUser.FindUserThatIsNotConnected());
+        Debug.Log("Find Async");
         var result = await cursor.ToListAsync();
-        if(result.Count > 0)
+        Debug.Log("Turn to list");
+        if (result.Count > 0)
         {
+            Debug.Log("Update");
             await users.UpdateOneAsync((x) => x._id == result[0]._id, Builders<MongoUser>.Update.Set(x=>x.IsConnected,true));
             _connectedUsersId = result[0]._id;
-            callback(true);
             Debug.Log("User connected!");
+            callback(true);
         }
         else
         {
-            callback(false);
             Debug.LogError("User not found");
+            callback(false);
         }
     }
 
