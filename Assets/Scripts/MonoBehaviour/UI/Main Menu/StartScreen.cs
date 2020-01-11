@@ -7,6 +7,9 @@ public class StartScreen : UIScreen
     
     public void GoToLoginScreen()
     {
-        UIScreenManager.Instance.Show<LoginScreen>();
+        //I am bypassing the login screen to go directly to the game
+        LoadingManager.LoadScene("Forest");
+
+        //UIScreenManager.Instance.Show<LoginScreen>();
     }
 }
