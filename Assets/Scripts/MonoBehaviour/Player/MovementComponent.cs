@@ -55,4 +55,9 @@ public class MovementComponent : MonoBehaviour
         this._MovementDirection = direction;
     }
 
+    public void GetMovementDirection(Vector2 direction)
+    {
+        this._MovementDirection = direction;
+    }
+
 }
